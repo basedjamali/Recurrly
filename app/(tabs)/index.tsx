@@ -1,17 +1,30 @@
 import "@/global.css";
 import { Link } from "expo-router";
-import { Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import { Image } from "expo-image";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 import { styled } from "nativewind";
 import images from "@/constants/images";
-import { HOME_USER, HOME_BALANCE } from "@/constants/data";
+import {
+  HOME_USER,
+  HOME_BALANCE,
+  UPCOMING_SUBSCRIPTIONS,
+  HOME_SUBSCRIPTIONS,
+} from "@/constants/data";
 import { icons } from "@/constants/icons";
 import { formatCurrency } from "@/lib/utils";
 import dayjs from "dayjs";
+import ListHeading from "@/components/ListHeading";
+import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
+import SubscriptionCard from "@/components/SubscriptionCard";
+import { useState } from "react";
 const SafeAreaView = styled(RNSafeAreaView);
 
 export default function App() {
+  const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<
+    string | null
+  >(null);
+
   return (
     <SafeAreaView className="flex-1 bg-background p-5">
       <View className="flex-1 p-5">
@@ -45,7 +58,38 @@ export default function App() {
           </View>
         </View>
 
-        {/* */}
+        {/* Upcoming */}
+        <View>
+          <ListHeading title="Upcoming" />
+          <FlatList
+            data={UPCOMING_SUBSCRIPTIONS}
+            renderItem={({ item }) => <UpcomingSubscriptionCard {...item} />}
+            keyExtractor={(item) => item.id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            ListEmptyComponent={
+              <Text className="home-empty-state py-4 text-sm font-sans-medium text-black/60">
+                No upcoming renewals yet
+              </Text>
+            }
+          />
+        </View>
+
+        {/* All Subscriptions */}
+        <View>
+          <ListHeading title="All Subscriptions" />
+          <SubscriptionCard
+            {...HOME_SUBSCRIPTIONS[0]}
+            expanded={expandedSubscriptionId === HOME_SUBSCRIPTIONS[0].id}
+            onPress={() =>
+              setExpandedSubscriptionId((currentId) =>
+                currentId === HOME_SUBSCRIPTIONS[0].id
+                  ? null
+                  : HOME_SUBSCRIPTIONS[0].id,
+              )
+            }
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
