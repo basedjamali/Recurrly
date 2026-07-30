@@ -1,6 +1,6 @@
 import "@/global.css";
 import { Link } from "expo-router";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, ScrollView, Text, View } from "react-native";
 import { Image } from "expo-image";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 import { styled } from "nativewind";
@@ -17,7 +17,7 @@ import dayjs from "dayjs";
 import ListHeading from "@/components/ListHeading";
 import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
 import SubscriptionCard from "@/components/SubscriptionCard";
-import { useState } from "react";
+import React, { useState } from "react";
 const SafeAreaView = styled(RNSafeAreaView);
 
 export default function App() {
@@ -76,17 +76,28 @@ export default function App() {
         </View>
 
         {/* All Subscriptions */}
-        <View>
+        <View className="flex-1">
           <ListHeading title="All Subscriptions" />
-          <SubscriptionCard
-            {...HOME_SUBSCRIPTIONS[0]}
-            expanded={expandedSubscriptionId === HOME_SUBSCRIPTIONS[0].id}
-            onPress={() =>
-              setExpandedSubscriptionId((currentId) =>
-                currentId === HOME_SUBSCRIPTIONS[0].id
-                  ? null
-                  : HOME_SUBSCRIPTIONS[0].id,
-              )
+
+          <FlatList
+            data={HOME_SUBSCRIPTIONS}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <SubscriptionCard
+                {...item}
+                expanded={expandedSubscriptionId === item.id}
+                onPress={() =>
+                  setExpandedSubscriptionId((currentId) =>
+                    currentId === item.id ? null : item.id,
+                  )
+                }
+              />
+            )}
+            extraData={expandedSubscriptionId}
+            ItemSeparatorComponent={() => <View className="h-4" />}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <Text className="home-empty-state ">No subscriptions yet.</Text>
             }
           />
         </View>

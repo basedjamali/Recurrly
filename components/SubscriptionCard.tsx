@@ -1,7 +1,11 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
-import { formatCurrency, formatSubscriptionDateTime } from "@/lib/utils";
+import {
+  formatCurrency,
+  formatSubscriptionDateTime,
+  formatStatusLabel,
+} from "@/lib/utils";
 import clsx from "clsx";
 
 const SubscriptionCard = ({
@@ -15,6 +19,9 @@ const SubscriptionCard = ({
   plan,
   expanded,
   renewalDate,
+  paymentMethod,
+  startDate,
+  status,
   onPress,
 }: SubscriptionCardProps) => {
   return (
@@ -57,6 +64,92 @@ const SubscriptionCard = ({
           </Text>
         </View>
       </View>
+
+      {expanded && (
+        <View className="sub-body mt-6 gap-4">
+          <View className="sub-details gap-6">
+            {/* Payment */}
+            <View className="sub-row flex-row items-center justify-between gap-3">
+              <View className="sub-row-copy min-w-0 flex-1 flex-row items-center gap-2">
+                <Text className="sub-label shrink-0 text-base font-sans-medium text-muted-foreground">
+                  Payment:
+                </Text>
+                <Text
+                  className="sub-value flex-1 font-sans-bold text-primary"
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {paymentMethod?.trim()}
+                </Text>
+              </View>
+            </View>
+
+            {/* Category */}
+            <View className="sub-row flex-row items-center justify-between gap-3">
+              <View className="sub-row-copy min-w-0 flex-1 flex-row items-center gap-2">
+                <Text className="sub-label shrink-0 text-base font-sans-medium text-muted-foreground">
+                  Category:
+                </Text>
+                <Text
+                  className="sub-value flex-1 font-sans-bold text-primary"
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {category?.trim() || plan?.trim()}
+                </Text>
+              </View>
+            </View>
+
+            {/* Started */}
+            <View className="sub-row flex-row items-center justify-between gap-3">
+              <View className="sub-row-copy min-w-0 flex-1 flex-row items-center gap-2">
+                <Text className="sub-label shrink-0 text-base font-sans-medium text-muted-foreground">
+                  Started:
+                </Text>
+                <Text
+                  className="sub-value flex-1 font-sans-bold text-primary"
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {startDate ? formatSubscriptionDateTime(startDate) : ""}
+                </Text>
+              </View>
+            </View>
+
+            {/* Renewal date */}
+            <View className="sub-row flex-row items-center justify-between gap-3">
+              <View className="sub-row-copy min-w-0 flex-1 flex-row items-center gap-2">
+                <Text className="sub-label shrink-0 text-base font-sans-medium text-muted-foreground">
+                  Renewal date:
+                </Text>
+                <Text
+                  className="sub-value flex-1 font-sans-bold text-primary"
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {renewalDate ? formatSubscriptionDateTime(renewalDate) : ""}
+                </Text>
+              </View>
+            </View>
+
+            {/* Status */}
+            <View className="sub-row flex-row items-center justify-between gap-3">
+              <View className="sub-row-copy min-w-0 flex-1 flex-row items-center gap-2">
+                <Text className="sub-label shrink-0 text-base font-sans-medium text-muted-foreground">
+                  Status:
+                </Text>
+                <Text
+                  className="sub-value flex-1 font-sans-bold text-primary"
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {status ? formatStatusLabel(status) : ""}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      )}
     </Pressable>
   );
 };
