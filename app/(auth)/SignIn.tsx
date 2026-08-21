@@ -16,12 +16,13 @@ import {
 import { colors } from "@/constants/theme";
 
 const SignIn = () => {
-  const { signIn } = useSignIn();
+  const { isLoaded, signIn } = useSignIn();
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleSignIn = async () => {
+    if (!isLoaded) return;
     setError("");
     const result = await signIn.password({
       identifier: emailAddress,
