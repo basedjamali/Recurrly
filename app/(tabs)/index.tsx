@@ -1,4 +1,5 @@
 import "@/global.css";
+import { useUser } from "@clerk/expo";
 import { Link } from "expo-router";
 import { FlatList, ScrollView, Text, View } from "react-native";
 import { Image } from "expo-image";
@@ -21,9 +22,16 @@ import React, { useState } from "react";
 const SafeAreaView = styled(RNSafeAreaView);
 
 export default function App() {
+  const { user } = useUser();
   const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<
     string | null
   >(null);
+
+  const displayName =
+    user?.fullName ||
+    user?.firstName ||
+    user?.emailAddresses[0]?.emailAddress ||
+    HOME_USER.name;
 
   return (
     <SafeAreaView className="flex-1 bg-background p-5">
@@ -35,11 +43,11 @@ export default function App() {
               <View className="home-header mb-2.5 flex-row items-center justify-between">
                 <View className="home-user flex-row items-center">
                   <Image
-                    source={images.avatar}
+                    source={user?.imageUrl || images.avatar}
                     className="home-avatar size-16 rounded-full"
                   />
                   <Text className="home-user-name ml-4 text-2xl font-sans-bold text-primary">
-                    {HOME_USER.name}
+                    {displayName}
                   </Text>
                 </View>
 
