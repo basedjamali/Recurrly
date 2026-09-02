@@ -43,17 +43,20 @@ const Subscriptions = () => {
           <FlatList
             data={filteredSubscriptions}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <SubscriptionCard
-                {...item}
-                expanded={expandedSubscriptionId === item.id}
-                onPress={() =>
-                  setExpandedSubscriptionId((currentId) =>
-                    currentId === item.id ? null : item.id,
-                  )
-                }
-              />
-            )}
+            renderItem={({ item }) => {
+              const { id, ...cardProps } = item;
+              return (
+                <SubscriptionCard
+                  {...cardProps}
+                  expanded={expandedSubscriptionId === id}
+                  onPress={() =>
+                    setExpandedSubscriptionId((currentId) =>
+                      currentId === id ? null : id,
+                    )
+                  }
+                />
+              );
+            }}
             ItemSeparatorComponent={() => <View className="h-4" />}
             contentContainerClassName="pb-30"
             showsVerticalScrollIndicator={false}
