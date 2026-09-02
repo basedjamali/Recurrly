@@ -16,31 +16,42 @@ import {
 import { colors } from "@/constants/theme";
 
 const SignIn = () => {
-  const { isLoaded, signIn } = useSignIn();
+  const { signIn } = useSignIn();
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleSignIn = async () => {
-    if (!isLoaded) return;
     setError("");
-    const result = await signIn.password({
-      identifier: emailAddress,
-      password,
-    });
+    try {
+      const result = await signIn.password({
+        identifier: emailAddress,
+        password,
+      });
 
-    if (result.error) {
-      setError(result.error.message);
-      return;
-    }
+      if (result.error) {
+        setError(result.error.message);
+        return;
+      }
 
-    if (signIn.status === "complete") {
+      if (signIn.status !== "complete") {
+        setError("The sign-in could not be completed. Please try again.");
+        return;
+      }
+
       const finalized = await signIn.finalize();
       if (finalized.error) {
         setError(finalized.error.message);
         return;
       }
+
       router.replace("/(tabs)");
+    } catch (signInError) {
+      setError(
+        signInError instanceof Error
+          ? signInError.message
+          : "Sign-in failed. Please try again.",
+      );
     }
   };
 

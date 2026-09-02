@@ -10,7 +10,13 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
-2. Start the app
+2. Add your Clerk publishable key to `.env`:
+
+   ```text
+   EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_key_here
+   ```
+
+3. Start the app
 
    ```bash
    npx expo start
