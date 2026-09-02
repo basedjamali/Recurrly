@@ -183,7 +183,8 @@ const CreateSubscriptionModal = ({
               <TextInput
                 className={clsx(
                   "auth-input",
-                  error && price && !isValid && "auth-input-error",
+                  error && (!Number.isFinite(parsedPrice) || parsedPrice <= 0) &&
+                    "auth-input-error",
                 )}
                 style={styles.input}
                 value={price}
